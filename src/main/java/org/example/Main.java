@@ -1,9 +1,7 @@
 package org.example;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class Main {
@@ -23,13 +21,14 @@ public class Main {
     listTwo.sort(Integer::compareTo);
 
     Iterator<Integer> iteratorOne = listOne.iterator();
-    Iterator<Integer> iteratorTwo = listTwo.iterator();
+    //  Iterator<Integer> iteratorTwo = listTwo.iterator();
 
+    Integer num = 0;
     Integer result = 0;
     while (iteratorOne.hasNext()) {
-      //  System.out.println(iteratorOne.next());
-      //  System.out.println(iteratorTwo.next());
-      result += Math.abs( iteratorOne.next() - iteratorTwo.next());
+      Integer current = iteratorOne.next();
+      num = Math.toIntExact(listTwo.stream().filter(c -> c.equals(current)).count());
+      result += current * num;
     }
     System.out.println(result);
   }
