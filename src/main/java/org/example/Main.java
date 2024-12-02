@@ -2,10 +2,7 @@ package org.example;
 
 import java.io.*;
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Main {
   public static void main(String[] args) throws IOException {
@@ -43,33 +40,40 @@ public class Main {
     int[] intArray;
     int zaehler = 0;
     Boolean safe = false;
+    Boolean trip = false;
+    Boolean mode;
     while (line != null) {
+      ArrayList<Integer> tempArray = new ArrayList<>();
       intArray = Arrays.stream(line.split(" ")).mapToInt(Integer::parseInt).toArray();
-      int[] sorted = intArray.clone();
-      Arrays.sort(sorted);
-      int[] sortedReverse = intArray.clone();
-      for (int i = 0; i < sorted.length; i++) {
-        sortedReverse[i] = sorted[sorted.length - 1 - i];
+      if (!(intArray[0] == intArray[1])) {
+        mode = determineMode(intArray[0],intArray[1]);
+      } else {
+        mode = determineMode(intArray[1],intArray[2]);
+        trip = true;
       }
-      if (Arrays.equals(intArray, sortedReverse) || Arrays.equals(intArray, sorted)) {
-        for (int j = 0; j < intArray.length - 1; j++) {
-          safe = intArray[j] != intArray[j + 1] && Math.abs(intArray[j] - intArray[j + 1]) <= 3 ;
-          if(!safe) {
-            break;
+      if (mode) {
+        for (int i = 0; i < intArray.length - 1; i++) {
+          if (intArray[i] < intArray[i + 1]  && !trip) {
+            tempArray.add(intArray[i]);
+            trip = true;
+          } else if (intArray[i] > intArray[i + 1]) {
+            tempArray.add(intArray[i]);
+          } else if (intArray[i] == intArray[i + 1] && !trip) {
+            trip = true;
+          } else {
+            break ;
           }
-          System.out.println(intArray[j]);
-          System.out.println(intArray[j+1]);
-          System.out.println("-");
+      }
+        if (tempArray.size() < intArray.length -1) {
+          break ;
         }
-        System.out.println(safe);
-        if (safe) {
-          zaehler++;
-          System.out.println("***");
-        }
+        zaehler++;
       }
       line = reader.readLine();
-      safe = false;
     }
     System.out.println(zaehler);
+  }
+  public static boolean determineMode(int a, int b) {
+    return a > b;
   }
 }
