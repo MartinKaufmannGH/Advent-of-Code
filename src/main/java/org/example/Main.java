@@ -1,9 +1,12 @@
 package org.example;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
   public static void main(String[] args) throws IOException {
@@ -35,32 +38,21 @@ public class Main {
     }
     System.out.println(result);
      */
-    /*
+
     BufferedReader reader;
     reader = new BufferedReader(new FileReader("Inputs/Day 2 Test"));
     String line = reader.readLine();
-    int[] intArray;
+    ArrayList<Integer> intArray = new ArrayList<>();
     int zaehler = 0;
     Boolean safe = false;
     Boolean trip = false;
     Boolean mode;
     while (line != null) {
-      //  ArrayList<Integer> tempArray = new ArrayList<>();
-      intArray = Arrays.stream(line.split(" ")).mapToInt(Integer::parseInt).toArray();
-      /*if (!(intArray[0] == intArray[1])) {
-        mode = determineMode(intArray[0],intArray[1]);
-      } else {
-        mode = determineMode(intArray[1],intArray[2]);
-        trip = true;
-      }
+      //  var diff = getDifference(intArray);
 
-      //  Integer reduced = Arrays.stream(line.split(" ")).mapToInt(Integer::parseInt).reduce(0, (subtotal,element) -> element - subtotal );
-      var diff = getDifference(intArray);
-
-
-
-      var validAsc = buildValidAscList(intArray);
-      var validDesc = buildValidDescList(intArray);
+      // var validAsc = buildValidAscList(intArray);
+      // var validDesc = buildValidDescList(intArray);
+      /*
       if (validAsc != null) {
         System.out.println(validAsc);
         zaehler++;
@@ -73,18 +65,18 @@ public class Main {
         }
         System.out.println();
       }
-
-
-
-      //Long fails = diff.stream().filter(c -> c > 3 || c < - 3 || c == 0).count();
-      //System.out.println(fails);
-      //if (fails < 2) {
-
-      //}
+       */
+      var tempArray = Arrays.stream(line.split(" ")).flatMapToInt(c -> IntStream.of(Integer.parseInt(c))).toArray();
+      for (int i = 0; i < tempArray.length; i++) {
+        intArray.add(tempArray[i]);
+      }
+      isSafe(intArray);
       line = reader.readLine();
     }
-    System.out.println(zaehler);
-  */
+    //  System.out.println(zaehler);
+
+
+    /*
     BufferedReader readerInput = new BufferedReader(new FileReader("Inputs/Day 3 Input"));
     String lineInput = readerInput.readLine();
     StringBuilder processed = new StringBuilder();
@@ -104,8 +96,11 @@ public class Main {
       i += getMult(elementArr[0],elementArr[1]);
     }
     System.out.println(i);
+     */
   }
-  /*
+
+
+
   public static boolean determineMode(int a, int b) {
     return a > b;
   }
@@ -119,8 +114,6 @@ public class Main {
     return difference;
   }
 
-   */
-  /*
   public static List<Integer> buildValidAscList(int[] input) {
     List<Integer> list = new ArrayList<>();
     ArrayList<Integer> arr = new ArrayList<>();
@@ -147,8 +140,6 @@ public class Main {
     }
   }
 
-   */
-  /*
   public static List<Integer> buildValidDescList(int[] input) {
     List<Integer> list = new ArrayList<>();
     ArrayList<Integer> arr = new ArrayList<>();
@@ -177,11 +168,45 @@ public class Main {
     }
   }
 
-   */
-
   public static Integer getMult(String einsInp, String zweiInp) {
     Integer eins = Integer.parseInt(einsInp);
     Integer zwei = Integer.parseInt(zweiInp);
     return eins * zwei;
+  }
+
+  public static Boolean isSafe(ArrayList<Integer> input) {
+
+    ArrayList<Integer> sorted = input;
+    Collections.sort(sorted);
+    ArrayList<Integer> reverse = sorted;
+    Collections.reverse(reverse);
+    Integer i = 0;
+    if ( input.equals(sorted) || input.equals(reverse)) {
+      ArrayList<Integer> temp = new ArrayList<>();
+      input.stream().distinct().forEach(temp::add);
+
+      if (temp.size() == input.size()) {
+        return true;
+      } else {
+        return madeSafe(input, i);
+      }
+    } else {
+      return madeSafe(input, i);
+    }
+  }
+  public static Boolean madeSafe(ArrayList<Integer> input, Integer i) {
+    var temp = input;
+    if (i < input.size()) {
+      temp.remove(i);
+      if (!isSafe(temp)) {
+        i++;
+        return madeSafe(temp, i);
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+
   }
 }
