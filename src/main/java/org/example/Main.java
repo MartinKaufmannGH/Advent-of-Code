@@ -86,32 +86,20 @@ public class Main {
     System.out.println(zaehler);
   */
     BufferedReader readerInput = new BufferedReader(new FileReader("Inputs/Day 3 Input"));
-    BufferedReader readerTest = new BufferedReader(new FileReader("Inputs/Day 3 Test"));
     String lineInput = readerInput.readLine();
-    String testInput = readerTest.readLine();
     StringBuilder processed = new StringBuilder();
-    StringBuilder inputInput = new StringBuilder();;
-    StringBuilder inputTest = new StringBuilder();;
+    StringBuilder inputInput = new StringBuilder();
     int i = 0;
     while (lineInput != null) {
       inputInput.append(lineInput);
       lineInput = readerInput.readLine();
     }
-    while (testInput != null) {
-      inputTest.append(testInput);
-      var elementArr = testInput.split(",");
-      //  i += getMult(elementArr[0],elementArr[1]);
-      testInput = readerTest.readLine();
-    }
     Matcher matcherPreProcesser = Pattern.compile("(?<=do\\(\\))(.*?)(?=don't\\(\\)|$)").matcher(inputInput);
     while (matcherPreProcesser.find()) {
       processed.append(matcherPreProcesser.group());
-      System.out.println(matcherPreProcesser.group());
-      System.out.println("***");
     }
     Matcher matcherInput = Pattern.compile("(?<=mul\\()[0-9]{1,3},[0-9]{1,3}(?=\\))").matcher(processed);
     while (matcherInput.find()) {
-      System.out.println(matcherInput.group());
       var elementArr = processed.substring(matcherInput.start(), matcherInput.end()).split(",");
       i += getMult(elementArr[0],elementArr[1]);
     }
