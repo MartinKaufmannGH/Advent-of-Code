@@ -37,7 +37,7 @@ public class Main {
       result += current * num;
     }
     System.out.println(result);
-     */
+
 
     BufferedReader reader;
     reader = new BufferedReader(new FileReader("Inputs/Day 2 Test"));
@@ -65,7 +65,7 @@ public class Main {
         }
         System.out.println();
       }
-       */
+
       var tempArray = Arrays.stream(line.split(" ")).flatMapToInt(c -> IntStream.of(Integer.parseInt(c))).toArray();
       for (int i = 0; i < tempArray.length; i++) {
         intArray.add(tempArray[i]);
@@ -76,6 +76,7 @@ public class Main {
     //  System.out.println(zaehler);
 
 
+  */
     /*
     BufferedReader readerInput = new BufferedReader(new FileReader("Inputs/Day 3 Input"));
     String lineInput = readerInput.readLine();
@@ -97,9 +98,79 @@ public class Main {
     }
     System.out.println(i);
      */
+    BufferedReader reader;
+    reader = new BufferedReader(new FileReader("Inputs/Day 4 Test"));
+    String line = reader.readLine();
+    ArrayList<ArrayList<String>> stringMatrix = new ArrayList<>();
+    while (line != null) {
+      ArrayList<String> tempList = new ArrayList<>();
+      Arrays.stream(line.split("")).sequential().forEach(tempList::add);
+      stringMatrix.add(tempList);
+      line = reader.readLine();
+    }
+    printMatrix(stringMatrix);
+    System.out.println("-----");
+
+    var stringMatrix90 = rotate90Clockwise(stringMatrix);
+    printMatrix(stringMatrix90);
+
+    System.out.println("-----");
+    var stringMatrix45 = rotate45Degrees(stringMatrix);
+    printMatrix(stringMatrix45);
+
+
+
   }
 
 
+  public static ArrayList<ArrayList<String>> rotate90Clockwise(ArrayList<ArrayList<String>> matrix) {
+    int rows = matrix.size();
+    int cols = matrix.get(0).size();
+
+    // Create a new matrix to store the rotated result
+    ArrayList<ArrayList<String>> rotated = new ArrayList<>();
+    for (int i = 0; i < cols; i++) {
+      rotated.add(new ArrayList<>());
+    }
+
+    // Transpose and reverse rows
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        rotated.get(j).add(0, matrix.get(i).get(j)); // Insert at index 0 to reverse
+      }
+    }
+
+    return rotated;
+  }
+  public static ArrayList<ArrayList<String>> rotate45Degrees(ArrayList<ArrayList<String>> matrix) {
+    int rows = matrix.size();
+    int cols = matrix.get(0).size();
+
+    // The number of diagonals = rows + cols - 1
+    int totalDiagonals = rows + cols - 1;
+
+    // Initialize result with empty diagonals
+    ArrayList<ArrayList<String>> rotated = new ArrayList<>();
+    for (int i = 0; i < totalDiagonals; i++) {
+      rotated.add(new ArrayList<>());
+    }
+
+    // Group elements by diagonals
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        rotated.get(i + j).add(matrix.get(i).get(j));
+      }
+    }
+
+    return rotated;
+  }
+  public static void printMatrix(ArrayList<ArrayList<String>> matrix) {
+    for (ArrayList<String> row : matrix) {
+      System.out.println(row);
+    }
+  }
+
+/*
 
   public static boolean determineMode(int a, int b) {
     return a > b;
@@ -113,7 +184,6 @@ public class Main {
     }
     return difference;
   }
-
   public static List<Integer> buildValidAscList(int[] input) {
     List<Integer> list = new ArrayList<>();
     ArrayList<Integer> arr = new ArrayList<>();
@@ -207,6 +277,6 @@ public class Main {
     } else {
       return false;
     }
-
   }
+*/
 }
