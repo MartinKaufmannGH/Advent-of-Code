@@ -98,8 +98,9 @@ public class Main {
     }
     System.out.println(i);
      */
+    /*
     BufferedReader reader;
-    reader = new BufferedReader(new FileReader("Inputs/Day 4 Test"));
+    reader = new BufferedReader(new FileReader("Inputs/Day 4 Input"));
     String line = reader.readLine();
     ArrayList<ArrayList<String>> stringMatrix = new ArrayList<>();
     while (line != null) {
@@ -109,17 +110,39 @@ public class Main {
       line = reader.readLine();
     }
     printMatrix(stringMatrix);
-    System.out.println("-----");
 
-    var stringMatrix90 = rotate90Clockwise(stringMatrix);
-    printMatrix(stringMatrix90);
+    Integer i = 0;
 
-    System.out.println("-----");
-    var stringMatrix45 = rotate45Degrees(stringMatrix);
-    printMatrix(stringMatrix45);
+    i = count(stringMatrix);
+    ArrayList<ArrayList<String>> stringMatrix45 = rotate45Degrees(stringMatrix);
+    i += count(stringMatrix45);
+    ArrayList<ArrayList<String>> stringMatrix90 = rotate90Clockwise(stringMatrix);
+    i += count(stringMatrix90);
+    stringMatrix45 = rotate45Degrees(stringMatrix90);
+    i += count(stringMatrix45);
+    stringMatrix90 = rotate90Clockwise(stringMatrix90);
+    i += count(stringMatrix90);
+    stringMatrix45 = rotate45Degrees(stringMatrix90);
+    i += count(stringMatrix45);
+    stringMatrix90 = rotate90Clockwise(stringMatrix90);
+    i += count(stringMatrix90);
+    stringMatrix45 = rotate45Degrees(stringMatrix90);
+    i += count(stringMatrix45);
+    System.out.println(i);
+  */
+
+  }
 
 
-
+  public static Integer count(ArrayList<ArrayList<String>> matrix) {
+    Integer i = 0;
+    for (ArrayList<String> row : matrix) {
+      Matcher xMas = Pattern.compile("XMAS").matcher(String.join("", row));
+      while (xMas.find()) {
+        i++;
+      }
+    }
+    return i;
   }
 
 
@@ -142,6 +165,7 @@ public class Main {
 
     return rotated;
   }
+
   public static ArrayList<ArrayList<String>> rotate45Degrees(ArrayList<ArrayList<String>> matrix) {
     int rows = matrix.size();
     int cols = matrix.get(0).size();
@@ -149,7 +173,7 @@ public class Main {
     // The number of diagonals = rows + cols - 1
     int totalDiagonals = rows + cols - 1;
 
-    // Initialize result with empty diagonals
+    // Initialize result with empty diagonal
     ArrayList<ArrayList<String>> rotated = new ArrayList<>();
     for (int i = 0; i < totalDiagonals; i++) {
       rotated.add(new ArrayList<>());
@@ -164,6 +188,7 @@ public class Main {
 
     return rotated;
   }
+
   public static void printMatrix(ArrayList<ArrayList<String>> matrix) {
     for (ArrayList<String> row : matrix) {
       System.out.println(row);
