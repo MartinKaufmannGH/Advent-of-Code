@@ -106,19 +106,22 @@ public class Main {
     BufferedReader reader;
     reader = new BufferedReader(new FileReader("Inputs/Day 5 Test"));
     String line = reader.readLine();
-    HashMap<Integer,ArrayList<Integer>> rulesMap = new HashMap<>();
-    ArrayList<ArrayList<Integer>> integerList = new ArrayList<>();
+    HashMap<String,ArrayList<String>> rulesMap = new HashMap<>();
+    ArrayList<String[]> stringList = new ArrayList<>();
+    ArrayList<String[]> toRemove = new ArrayList<>();
     while (line != null) {
-      System.out.println(line);
+      //  System.out.println(line);
       if (line.contains("|")) {
         var tempArr = line.split("\\|");
-        if (!rulesMap.containsKey(Integer.parseInt(tempArr[0]))) {
-          ArrayList<Integer> lst = new ArrayList<>();
-          lst.add(Integer.parseInt(tempArr[1]));
-          rulesMap.put(Integer.parseInt(tempArr[0]), lst);
+        if (!rulesMap.containsKey(tempArr[0])) {
+          ArrayList<String> lst = new ArrayList<>();
+          lst.add(tempArr[1]);
+          rulesMap.put(tempArr[0], lst);
         } else {
-          rulesMap.get(Integer.parseInt(tempArr[0])).add(Integer.parseInt(tempArr[1]));
+          rulesMap.get(tempArr[0]).add(tempArr[1]);
         }
+      } else if (!line.isEmpty()) {
+        stringList.add(line.split(","));
       }
       line = reader.readLine();
     }
@@ -138,7 +141,40 @@ public class Main {
     }
     j = 0;
     */
-    System.out.println(rulesMap.entrySet());
+
+    Integer outerIndex = 0;
+    Iterator<String[]> iterator = stringList.iterator();
+    while (iterator.hasNext()) {
+      String[] string = iterator.next();
+      Integer innerIndex = 0;
+      Iterator innerIterator = Arrays.stream(string).iterator();
+      while (innerIterator.hasNext()) {
+        String element = innerIterator.next().toString();
+        Integer tempIndex = 0;
+        if (rulesMap.containsKey(element)) {
+          tempIndex = innerIndex;
+          while (tempIndex >= 0) {
+            if (rulesMap.get(element).contains(string[tempIndex])) {
+              //  System.out.println("Fehler");
+              //  System.out.println(element);
+              //  System.out.println(string[tempIndex]);
+              toRemove.add(string);
+            }
+            tempIndex--;
+          }
+        }
+        innerIndex++;
+      }
+      outerIndex++;
+    }
+    stringList.removeAll(toRemove);
+    //  System.out.println(stringList.size());
+    Integer i = 0;
+    for (String[] string : stringList) {
+      Integer midPoint = string.length / 2;
+      i += Integer.parseInt(string[midPoint]);
+    }
+    System.out.println(i);
 
     /*
     BufferedReader reader;
@@ -233,6 +269,11 @@ public class Main {
     } catch (Exception e) {
     }
     return i;
+  }
+  public static ArrayList<String> topologicalSort(HashMap<String,ArrayList<String>> set) {
+    ArrayList<String> sorted = new ArrayList<>();
+
+    return sorted;
   }
 /*
 
