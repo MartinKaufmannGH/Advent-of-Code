@@ -1,5 +1,7 @@
 package org.example;
 
+import java.awt.*;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -98,41 +100,60 @@ public class Main {
     }
     System.out.println(i);
      */
-    /*
+
+
+
     BufferedReader reader;
-    reader = new BufferedReader(new FileReader("Inputs/Day 4 Input"));
+    reader = new BufferedReader(new FileReader("Inputs/Day 5 Test"));
     String line = reader.readLine();
-    ArrayList<ArrayList<String>> stringMatrix = new ArrayList<>();
+    HashMap<Integer,ArrayList<Integer>> rulesMap = new HashMap<>();
+    ArrayList<ArrayList<Integer>> integerList = new ArrayList<>();
     while (line != null) {
-      ArrayList<String> tempList = new ArrayList<>();
-      Arrays.stream(line.split("")).sequential().forEach(tempList::add);
-      stringMatrix.add(tempList);
+      System.out.println(line);
+      if (line.contains("|")) {
+        var tempArr = line.split("\\|");
+        if (!rulesMap.containsKey(Integer.parseInt(tempArr[0]))) {
+          ArrayList<Integer> lst = new ArrayList<>();
+          lst.add(Integer.parseInt(tempArr[1]));
+          rulesMap.put(Integer.parseInt(tempArr[0]), lst);
+        } else {
+          rulesMap.get(Integer.parseInt(tempArr[0])).add(Integer.parseInt(tempArr[1]));
+        }
+      }
       line = reader.readLine();
     }
-    printMatrix(stringMatrix);
-
+    /*
     Integer i = 0;
+    Integer j = 0;
+    printMatrix(stringMatrix);
+    for (ArrayList<String> row : stringMatrix) {
+      Integer k = 0;
+      for (String s : row) {
+        if (s.equals("A")) {
+          i += getXMas(stringMatrix, k, stringMatrix.indexOf(row));
+        }
+        k++;
+      }
+      j++;
+    }
+    j = 0;
+    */
+    System.out.println(rulesMap.entrySet());
 
-    i = count(stringMatrix);
-    ArrayList<ArrayList<String>> stringMatrix45 = rotate45Degrees(stringMatrix);
-    i += count(stringMatrix45);
-    ArrayList<ArrayList<String>> stringMatrix90 = rotate90Clockwise(stringMatrix);
-    i += count(stringMatrix90);
-    stringMatrix45 = rotate45Degrees(stringMatrix90);
-    i += count(stringMatrix45);
-    stringMatrix90 = rotate90Clockwise(stringMatrix90);
-    i += count(stringMatrix90);
-    stringMatrix45 = rotate45Degrees(stringMatrix90);
-    i += count(stringMatrix45);
-    stringMatrix90 = rotate90Clockwise(stringMatrix90);
-    i += count(stringMatrix90);
-    stringMatrix45 = rotate45Degrees(stringMatrix90);
-    i += count(stringMatrix45);
-    System.out.println(i);
-  */
+    /*
+    BufferedReader reader;
+    reader = new BufferedReader(new FileReader("Inputs/Day 5 Test"));
 
+    String line = reader.readLine();
+    while (line != null) {
+      if (line.split("\\|").length == 2) {
+        System.out.println(line.split("\\|").length);
+      }
+
+        line = reader.readLine();
+    }
+    */
   }
-
 
   public static Integer count(ArrayList<ArrayList<String>> matrix) {
     Integer i = 0;
@@ -162,7 +183,7 @@ public class Main {
         rotated.get(j).add(0, matrix.get(i).get(j)); // Insert at index 0 to reverse
       }
     }
-
+    // printMatrix(rotated);
     return rotated;
   }
 
@@ -186,6 +207,7 @@ public class Main {
       }
     }
 
+    // printMatrix(rotated);
     return rotated;
   }
 
@@ -195,6 +217,23 @@ public class Main {
     }
   }
 
+
+  public static Integer getXMas(ArrayList<ArrayList<String>> matrix, Integer x, Integer y) {
+    Integer i = 0;
+    try {
+      System.out.println("---");
+      String hor = matrix.get(y - 1).get(x + 1).concat(matrix.get(y).get(x)).concat(matrix.get(y + 1).get(x - 1));
+      String vert = matrix.get(y + 1).get(x + 1).concat(matrix.get(y).get(x)).concat(matrix.get(y - 1).get(x - 1));
+      System.out.println("Hor: " + hor);
+      System.out.println("Vert: " + vert);
+      // System.out.println("---");
+      if ((hor.equals("MAS") && vert.equals("MAS")) || (hor.equals("SAM") && vert.equals("SAM")) || (hor.equals("MAS") && vert.equals("SAM")) || (hor.equals("SAM") && vert.equals("MAS"))) {
+        i++;
+      }
+    } catch (Exception e) {
+    }
+    return i;
+  }
 /*
 
   public static boolean determineMode(int a, int b) {
